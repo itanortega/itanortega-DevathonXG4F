@@ -23,7 +23,7 @@ const Lobby = () => {
           <AvatarCard src="assets/images/skull-avatar.png" alt="Skull" name="Skull" />
         </div>
       </div>
-      <div className="w-[20%] text-center mb-10 border-dashed border-orange-700 rounded-2xl p-2 flex items-center justify-center bg-black/40">
+      <div className="w-[70%] md:w-[20%] text-center mb-10 border-dashed border-orange-700 rounded-2xl p-2 flex items-center justify-center bg-black/40">
         <h4 className="text-gray-300 mr-3">Available Games: </h4>
         <h3 className="text-white text-2xl font-bold">12</h3>
       </div>
