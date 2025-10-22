@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Nosifer&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.nosifer-regular {
+  font-family: "Nosifer", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
