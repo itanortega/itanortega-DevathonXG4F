@@ -27,13 +27,11 @@ const Lobby = () => {
   }, [username, selectedGhost, selectedPumpkin, selectedWitch, selectedCat, selectedSkull]);
 
   const handleNewGame = () => {
-    //first validate username and avatar selection
     if (!username || !avatarUrl) {
       alert("Please enter a username and select an avatar.");
       return;
-    } // proceed to create a new game
+    } 
     console.log(username, avatarUrl);
-    // navigate to board page using react-router
     navigate("/board"); 
   };
 
