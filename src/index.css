@@ -8,3 +8,32 @@
   font-weight: 300;
   font-style: normal;
 }
+
+.layout{
+    @apply bg-[#181411] w-full h-screen flex flex-col items-center justify-center bg-[url(../assets/images/orange-back.png)] bg-fixed bg-cover bg-center bg-no-repeat;
+}
+
+.wrap-lobby {
+  @apply sm:w-[70%] flex flex-col items-center justify-center text-gray-400 border-[1px] border-orange-500 rounded-xl p-5 bg-orange-400/10 backdrop-blur-md shadow-xl;
+}
+
+.avatar-card {
+  @apply flex flex-col items-center bg-orange-500/10 border-2 hover:border-2 border-orange-500/25 hover:border-orange-500 rounded-2xl p-4 sm:p-5 hover:bg-orange-400/15 hover:scale-105 transition-all cursor-pointer m-2 
+  hover:shadow-xl
+}
+
+.btn{
+  @apply w-[80%] md:w-[50%] border-2  rounded-full py-2   transition-all;
+}
+
+.btn-primary{
+    @apply border-orange-500  bg-orange-500 hover:bg-orange-600  text-white;
+}
+
+.btn-brown{
+    @apply border-[#392f28]  bg-[#392f28] hover:bg-[#4a3b32]  text-white;
+}
+
+.btn-outline{
+    @apply border-orange-500 text-white hover:bg-orange-500/50;
+}
