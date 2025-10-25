@@ -2,6 +2,7 @@ import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import AvatarCard from "../components/AvatarCard";
 import { useGameStore } from "../store/gameStore";
+import { connectSocket, onEvent, offEvent, disconnectSocket } from "../services/socketService";
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -22,7 +23,22 @@ const Lobby = () => {
     return src;
   };
 
+
   useEffect(() => {
+
+    connectSocket();
+
+    const handleConnect = () => {
+      console.log("Conexión con el servidor");
+    };
+
+    onEvent("connect", handleConnect);
+
+    return () => {
+      offEvent("connect", handleConnect);
+      disconnectSocket();
+    };
+
     console.log(username);
   }, [username, selectedGhost, selectedPumpkin, selectedWitch, selectedCat, selectedSkull]);
 
