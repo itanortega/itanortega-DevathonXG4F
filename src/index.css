@@ -43,6 +43,26 @@
   @apply border-orange-500 text-white hover:bg-orange-500/50;
 }
 
+/* width */
+::-webkit-scrollbar {
+  @apply w-3;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-black/50;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-orange-600 rounded-lg;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-orange-700;
+}
+
 @keyframes fly {
   0% {
     left: -15%;
