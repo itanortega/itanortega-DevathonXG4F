@@ -6,9 +6,9 @@ import type { Board } from "../models/board";
 
 
 const initialBoardState: Board = [
-  ["", "X", ""],
   ["", "", ""],
-  ["O", "", ""],
+  ["", "", ""],
+  ["", "", ""],
 ];
 
 const Board = () => {
