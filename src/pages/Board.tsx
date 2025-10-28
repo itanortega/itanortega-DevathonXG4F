@@ -2,14 +2,8 @@ import { useState } from "react";
 import mockAvatar from "../assets/avatarImg.png";
 import Player from "../components/Player";
 import { useGameStore } from "../store/gameStore";
+import type { Board } from "../models/board";
 
-type BoardCell = "" | "X" | "O";
-
-type Board = [
-  [BoardCell, BoardCell, BoardCell],
-  [BoardCell, BoardCell, BoardCell],
-  [BoardCell, BoardCell, BoardCell]
-];
 
 const initialBoardState: Board = [
   ["", "X", ""],

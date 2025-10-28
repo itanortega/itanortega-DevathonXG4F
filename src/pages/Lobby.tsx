@@ -30,23 +30,23 @@ const Lobby = () => {
   };
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    connectSocket();
+  //   connectSocket();
 
-    const handleConnect = () => {
-      console.log("Conexión con el servidor");
-    };
+  //   const handleConnect = () => {
+  //     console.log("Conexión con el servidor");
+  //   };
 
-    onEvent("connect", handleConnect);
+  //   onEvent("connect", handleConnect);
 
-    return () => {
-      offEvent("connect", handleConnect);
-      disconnectSocket();
-    };
+  //   return () => {
+  //     offEvent("connect", handleConnect);
+  //     disconnectSocket();
+  //   };
 
-    console.log(username);
-  }, [username, selectedGhost, selectedPumpkin, selectedWitch, selectedCat, selectedSkull, selectedZombie]);
+  //   console.log(username);
+  // }, [username, selectedGhost, selectedPumpkin, selectedWitch, selectedCat, selectedSkull, selectedZombie]);
 
   const handleNewGame = () => {
     if (!username || !avatarUrl) {
