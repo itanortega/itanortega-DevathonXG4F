@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import mockAvatar from "../assets/avatarImg.png";
 import Player from "../components/Player";
 import { useGameStore } from "../store/gameStore";
 import type { Board } from "../models/board";
-
+import {
+  makeMove,
+  offEvent,
+  onEvent,
+  type MakeMoveRequest,
+} from "../services/socketService";
+import { SrvEvts, type GameStateData } from "../models/socketEvents";
 
 const initialBoardState: Board = [
   ["", "", ""],
@@ -12,12 +18,58 @@ const initialBoardState: Board = [
 ];
 
 const Board = () => {
-  const { username, avatarUrl } = useGameStore();
-  const [board, setBoard] = useState(initialBoardState)
+  const { username, avatarUrl, currentRoomId, symbol } = useGameStore();
+  const [board, setBoard] = useState(initialBoardState);
+  const [currentTurn, setCurrentTurn] = useState<"X" | "O">("X");
+  const [winner, setWinner] = useState<"X" | "O" | null>(null)
   console.log("Board page - username:", username, "avatarUrl:", avatarUrl);
+
+  const makeMoveHandler = (row: number, col: number) => {
+    if (!currentRoomId || !symbol) return;
+    if (board[row][col] !== "") return;
+    if (currentTurn !== symbol) return
+
+    const move: MakeMoveRequest = {
+      room_id: currentRoomId,
+      row: row as 0 | 1 | 2,
+      col: col as 0 | 1 | 2,
+      player: symbol,
+    };
+
+    console.log(move)
+
+    makeMove(move);
+  };
+
+  useEffect(() => {
+    // 🔹 Escuchar cuando el servidor envíe un nuevo estado de juego
+    const handleGameState = ({board, current_turn, winner}: GameStateData) => {
+      console.log(board, current_turn)
+      console.log(winner)
+      setBoard(board)
+      setCurrentTurn(current_turn);
+      if(winner !== null){
+        setWinner(winner)
+      }
+    };
+
+    onEvent(SrvEvts.GAME_STATE, handleGameState);
+
+    return () => {
+      offEvent(SrvEvts.GAME_STATE, handleGameState);
+    };
+  }, []);
 
   return (
     <div className="wrap-lobby">
+
+      {!winner ? currentTurn === symbol ? (
+        <p className="text-2xl">YOUR TURN</p>
+      ): (
+        <p className="text-2xl">OPPONENT'S TURN</p>
+      ) : (
+        <p className="text-2xl">winner: {winner}</p>
+      )}
       <div className="w-full max-w-[1440px] flex justify-around items-center nosifer-regular">
         <Player
           name={username || "Guest"}
@@ -33,6 +85,7 @@ const Board = () => {
                 data-row={rowIndex}
                 data-col={colIndex}
                 disabled={cell !== ""}
+                onClick={() => makeMoveHandler(rowIndex,colIndex)}
               >
                 {cell}
               </button>

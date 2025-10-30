@@ -6,6 +6,10 @@ type GameStore = {
     setUsername: (username: string) => void;
     setAvatarUrl: (avatarUrl: string) => void;
     resetUser: () => void;
+    setCurrentRoomId: (currentRoomId: string) => void
+    setSymbol: (symbol: "X" | "O") => void
+    currentRoomId: string | null;
+    symbol:  "X" | "O" | null
     wins: number;
     losses: number;
     ties: number;
@@ -21,6 +25,10 @@ export const useGameStore = create<GameStore>((set) => ({
     setUsername: (username) => set({ username }),
     setAvatarUrl: (avatarUrl) => set({ avatarUrl }),
     resetUser: () => set({ username: null, avatarUrl: null }),
+    setCurrentRoomId: (currentRoomId) => set({currentRoomId}),
+    setSymbol: (symbol) => set({symbol}),
+    currentRoomId: null,
+    symbol: null,
     wins: 0,
     losses: 0,
     ties: 0,
