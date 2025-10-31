@@ -1,57 +1,71 @@
 interface Game {
-    host: string;
-    players: number;
-    maxPlayers: number;
-    id: number;
+  host: string;
+  players: number;
+  maxPlayers: number;
+  id: number;
 }
 
 interface ModalGamesProps {
-    games: Game[];
-    onClose: () => void;
-    onJoinGame: (gameId: number) => void;
-    show: boolean;
+  games: Game[];
+  onClose: () => void;
+  onJoinGame: (gameId: number) => void;
+  show: boolean;
 }
 
 function ModalGames({ games, onClose, onJoinGame, show }: ModalGamesProps) {
+  if (!show) return null;
 
-    if (!show) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+      <div className="flex flex-col gap-4 p-6 w-full max-w-lg bg-gradient-to-b from-orange-900/95 to-orange-950/95 backdrop-blur-sm border-2 border-orange-700/50 text-orange-10 rounded-lg shadow-2xl">
+        {/* Header */}
+        <div className="text-3xl text-center font-bold text-orange-400">
+          Join a Spooky Game
+        </div>
 
-    return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div className="relative w-[90%] lg:w-[0%] xl:w-[40%] flex flex-col items-center justify-center bg-black/50 border border-orange-400 rounded-3xl shadow-2xl">
-            <div className="flex items-center justify-between p-4 border-b border-primary/20 border-orange-400 w-full">
-                <h2 className="font-display text-4xl text-primary text-orange-500">Join a Spooky Game</h2>
-                <button className="text-white/70 hover:text-white" onClick={onClose}>
-                    <span className="material-symbols-outlined">close</span>
+        {/* Game List */}
+        <div className="max-h-96 space-y-2 overflow-y-auto mt-4 pr-2 scrollbar-thin! scrollbar-thumb-orange-700! scrollbar-track-orange-950/50!">
+          {games.length > 0 ? (
+            games.map((game) => (
+              <div className="flex items-center justify-between p-4 bg-orange-950/50 border border-orange-700/30 rounded-lg hover:bg-orange-950/70 transition-colors">
+                <div>
+                  <p className="text-md font-bold text-orange-100">
+                    {game.host}
+                  </p>
+                  <p className="text-sm text-orange-400">
+                    {game.players}/{game.maxPlayers} Players
+                  </p>
+                </div>
+                <button
+                  className="font-bold text-sm bg-orange-500 hover:bg-orange-600 text-white transition-colors px-4 py-1.5 rounded-md"
+                  onClick={() => onJoinGame(game.id)}
+                >
+                  Join
                 </button>
+              </div>
+            ))
+          ) : (
+            <div className="p-4 bg-orange-950/50 border border-orange-700/30 rounded-lg">
+              <p>There are no games available!</p>
+              <button className="text-primary font-bold hover:underline">
+                Start your own spooky match!
+              </button>
             </div>
-            <div className="w-full max-h-80 flex flex-col gap-2 p-4 border-b border-orange-400 overflow-y-auto">
-                {games.length > 0 ? games.map((game) => (
-                    <div key={game.id} className="flex items-center justify-between p-4 bg-black/30 rounded-lg">
-                        <div className="flex flex-col">
-                            <p className="text-base text-white/70">Host: <span className="font-bold text-white">{game.host}</span></p>
-                            <p className="text-sm text-white/60">{game.players}/{game.maxPlayers} players</p>
-                        </div>
-                        <button 
-                            className="flex h-10 min-w-[84px] items-center justify-center gap-2 rounded-3xl bg-primary px-4 text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors"
-                            onClick={() => onJoinGame(game.id)}
-                        >
-                            <span className="material-symbols-outlined text-base">skull</span>
-                            <span>Join</span>
-                        </button>
-                    </div>
-                )) : (      
-                    <div className="flex items-center justify-center p-4 text-center">
-                        <p className="text-white/60">No other games available. <br /> <button className="text-primary font-bold hover:underline">Start your own spooky match!</button></p>
-                    </div>
-                )}      
-            </div>
-            <div className="w-full flex items-center justify-center px-4 py-3">
-                <button className="btn btn-brown w-full" onClick={onClose}>
-                    <span className="truncate">Close</span>
-                </button>
-            </div>
+          )}
         </div>
+
+        {/* Footer */}
+        <div className="w-full">
+          <button
+            className="btn truncate font-bold  text-white bg-neutral-700 border-none hover:bg-neutral-600 !w-full"
+            onClick={onClose}
+          >
+            Close
+          </button>
         </div>
+      </div>
+    </div>
+  );
 }
 
 export default ModalGames;
