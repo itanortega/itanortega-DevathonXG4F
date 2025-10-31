@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AvatarCard from "../components/AvatarCard";
 import ModalGames from "../components/ModalGames";
 import { useGameStore } from "../store/gameStore";
-import {connectSocket, disconnectSocket, offEvent, onGameStart, onJoinError, onRoomJoined, onRoomList, onRoomListUpdate,} from "../services/socketService";
+import { createRoom, joinRoom, offEvent, onGameStart, onJoinError, onRoomCreated, onRoomJoined, onRoomList, onRoomListUpdate,} from "../services/socketService";
 
-import data from "../data/Games";
-import { ServerEmitEvents, type GameStartData, type JoinErrorData, type RoomJoinedData, type RoomListData, type RoomSummary } from "../models/socketEvents";
+import { ServerEmitEvents, type GameStartData, type JoinErrorData, type RoomInfo, type RoomJoinedData } from "../models/socketEvents";
 
 const avatars = [
   { src: "ghost-avatar.png", alt: "Ghost", name: "Ghost" },
@@ -19,9 +18,11 @@ const avatars = [
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const { username, setUsername, avatarUrl, setAvatarUrl } = useGameStore();
+  const { username, setUsername, avatarUrl, setAvatarUrl, setCurrentRoomId, setSymbol } = useGameStore();
   const [selectedAvatarName, setSelectedAvatarName] = useState<string | null>(null);
   const [showGamesModal, setShowGamesModal] = useState<boolean>(false);
+  const [avaiableGameList, setvaiableGameList] = useState<RoomInfo[] | null>(null)
+  const lastRoomCreated = useRef<string | null>(null)
   const selectAvatar = (src: string, name: string) => {
     setSelectedAvatarName(name);
     setAvatarUrl(src);
@@ -29,22 +30,31 @@ const Lobby = () => {
   };
 
  useEffect(() => {
-  connectSocket();
 
-  const handleRoomList = (data: RoomListData) => {
+  const handleRoomList = (data: RoomInfo[]) => {
     // logica para manejar la lista de salas
+    setvaiableGameList(data)
   };
+
+  const handleOnCreated = (data: { room_id: string }) => {
+    lastRoomCreated.current = data.room_id
+  }
 
   const handleRoomJoined = (data: RoomJoinedData) => {
     // logica para manejar los ingresos en las salas
   };
 
-  const handleRoomListUpdate = (data: RoomSummary[]) => {
+  const handleRoomListUpdate = (data: RoomInfo[]) => {
     // logica para manejar la actualizacion de la lista de salas
+    setvaiableGameList(data)
+
   };
 
   const handleGameStart = (data: GameStartData) => {
-    // logica para manejar el inicio de la partida
+    console.log("TENEMOS LOS 2 JUGADORES LISTOS")
+    setCurrentRoomId(data.room_id)
+    setSymbol(data.you_are)
+    navigate("/board");
   };
 
   const handleJoinError = (data: JoinErrorData) => {
@@ -56,6 +66,7 @@ const Lobby = () => {
   onRoomListUpdate(handleRoomListUpdate);
   onGameStart(handleGameStart);
   onJoinError(handleJoinError);
+  onRoomCreated(handleOnCreated)
 
   return () => {
     offEvent(ServerEmitEvents.ROOM_LIST, handleRoomList);
@@ -63,8 +74,8 @@ const Lobby = () => {
     offEvent(ServerEmitEvents.ROOM_LIST_UPDATE, handleRoomListUpdate);
     offEvent(ServerEmitEvents.GAME_START, handleGameStart);
     offEvent(ServerEmitEvents.JOIN_ERROR, handleJoinError);
+    offEvent(ServerEmitEvents.ROOM_CREATED, handleOnCreated)
 
-    disconnectSocket();
   };
 }, []);
 
@@ -74,12 +85,9 @@ const Lobby = () => {
       return;
     }
     console.log(username, avatarUrl);
-    navigate("/board");
-  };
+      createRoom()
 
-  const handleJoinGame = (gameId: number) => {
-    console.log(`Joining game with ID: ${gameId}`);
-    //navigate("/board");
+
   };
 
   const handleCloseGamesModal = () => {
@@ -89,8 +97,8 @@ const Lobby = () => {
   return (
     <>
       <ModalGames
-        games={data}
-        onJoinGame={handleJoinGame}
+        games={avaiableGameList}
+        onJoinGame={(roomId: string) => joinRoom(roomId)}
         show={showGamesModal}
         onClose={handleCloseGamesModal}
       />
@@ -108,7 +116,6 @@ const Lobby = () => {
             className="w-1/2 p-2 rounded-full bg-black/50 text-orange-500 text-2xl font-bold text-center shadow-sm"
             value={username || ""}
             onChange={(e) => setUsername(e.target.value)}
-            onClick={(e) => console.log(e.target)}
           />
         </div>
         <div className="my-5 w-full flex flex-col items-center">
@@ -128,7 +135,7 @@ const Lobby = () => {
         </div>
         <div className="w-[70%] md:w-[20%] text-center mb-10 border-dashed border-orange-700 rounded-2xl p-2 flex items-center justify-center bg-black/40">
           <h4 className="text-gray-300 mr-3">Available Games: </h4>
-          <h3 className="text-white text-2xl font-bold">12</h3>
+          <h3 className="text-white text-2xl font-bold">{avaiableGameList?.length}</h3>
         </div>
         <div className="w-full flex flex-col gap-2 items-center justify-center">
           <button className="btn btn-primary" onClick={handleNewGame}>

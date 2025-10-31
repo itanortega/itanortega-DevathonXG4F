@@ -34,8 +34,7 @@ export interface RoomSummary {
 
 export interface RoomInfo {
   room_id: string;
-  players_count: number;
-  status: string;
+  player_count: number;
 }
 
 export interface GameStartData {
