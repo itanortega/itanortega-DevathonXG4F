@@ -9,7 +9,7 @@ import {
   onEvent,
   type MakeMoveRequest,
 } from "../services/socketService";
-import { SrvEvts, type GameStateData } from "../models/socketEvents";
+import { ServerEmitEvents, type GameStateData } from "../models/socketEvents";
 
 const initialBoardState: Board = [
   ["", "", ""],
@@ -53,10 +53,10 @@ const Board = () => {
       }
     };
 
-    onEvent(SrvEvts.GAME_STATE, handleGameState);
+    onEvent(ServerEmitEvents.GAME_STATE, handleGameState);
 
     return () => {
-      offEvent(SrvEvts.GAME_STATE, handleGameState);
+      offEvent(ServerEmitEvents.GAME_STATE, handleGameState);
     };
   }, []);
 

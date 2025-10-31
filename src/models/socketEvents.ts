@@ -1,6 +1,6 @@
 import type { Board } from "./board";
 
-export const CliEvts = {
+export const ClientEmitEvents = {
   CREATE_ROOM: "create_room",
   JOIN_ROOM_REQUEST: "join_room_request",
   MAKE_MOVE: "make_move",
@@ -8,9 +8,9 @@ export const CliEvts = {
 } as const;
 
 export type ClientEmitEvent =
-  (typeof CliEvts)[keyof typeof CliEvts];
+  (typeof ClientEmitEvents)[keyof typeof ClientEmitEvents];
 
-export const SrvEvts = {
+export const ServerEmitEvents = {
   ROOM_CREATED: "room_created",
   ROOM_LIST_UPDATE: "room_list_update",
   ROOM_JOINED: "room_joined",
@@ -24,7 +24,7 @@ export const SrvEvts = {
 
 
 export type ServerEmitEvent =
-  (typeof SrvEvts)[keyof typeof SrvEvts];
+  (typeof ServerEmitEvents)[keyof typeof ServerEmitEvents];
 
 export interface RoomSummary {
   room_id: string;

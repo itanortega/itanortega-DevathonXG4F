@@ -1,8 +1,8 @@
 // src/services/socketService.ts
 import { io, Socket } from "socket.io-client";
 import {
-  CliEvts,
-  SrvEvts,
+  ClientEmitEvents,
+  ServerEmitEvents,
   type ClientEmitEvent,
   type GameStartData,
   type GameStateData,
@@ -53,56 +53,56 @@ export const emitEvent = (
 };
 
 export const createRoom = (roomName?: string) => {
-  emitEvent(CliEvts.CREATE_ROOM, { room_name: roomName ?? "" });
+  emitEvent(ClientEmitEvents.CREATE_ROOM, { room_name: roomName ?? "" });
 };
 
 export const joinRoom = (roomId: string) => {
-  emitEvent(CliEvts.JOIN_ROOM_REQUEST, { room_id: roomId });
+  emitEvent(ClientEmitEvents.JOIN_ROOM_REQUEST, { room_id: roomId });
 };
 
 export const makeMove = (move: MakeMoveRequest) => {
-  emitEvent(CliEvts.MAKE_MOVE, move);
+  emitEvent(ClientEmitEvents.MAKE_MOVE, move);
 };
 
 export const getRoomList = () => {
-  emitEvent(CliEvts.GET_ROOM_LIST);
+  emitEvent(ClientEmitEvents.GET_ROOM_LIST);
   // socket.emit("get_room_list");
 };
 
 export const onRoomCreated = (callback: (data: { room_id: string }) => void) => {
-  onEvent<{ room_id: string }>(SrvEvts.ROOM_CREATED, callback);
+  onEvent<{ room_id: string }>(ServerEmitEvents.ROOM_CREATED, callback);
 };
 
 export const onRoomListUpdate = (callback: (data: RoomInfo[]) => void) => {
-  onEvent<RoomInfo[]>(SrvEvts.ROOM_LIST_UPDATE, callback);
+  onEvent<RoomInfo[]>(ServerEmitEvents.ROOM_LIST_UPDATE, callback);
 };
 
 export const onGameStart = (callback: (data: GameStartData) => void) => {
-  onEvent<GameStartData>(SrvEvts.GAME_START, callback);
+  onEvent<GameStartData>(ServerEmitEvents.GAME_START, callback);
 };
 
 export const onGameState = (callback: (data: GameStateData) => void) => {
-  onEvent<GameStateData>(SrvEvts.GAME_STATE, callback);
+  onEvent<GameStateData>(ServerEmitEvents.GAME_STATE, callback);
 };
 
 export const onRoomJoined = (callback: (data: RoomJoinedData) => void) => {
-  onEvent<RoomJoinedData>(SrvEvts.ROOM_JOINED, callback);
+  onEvent<RoomJoinedData>(ServerEmitEvents.ROOM_JOINED, callback);
 };
 
 export const onRoomList = (callback: (data: RoomInfo[]) => void) => {
-  onEvent<RoomListData>(SrvEvts.ROOM_LIST, callback);
+  onEvent<RoomListData>(ServerEmitEvents.ROOM_LIST, callback);
 };
 
 export const onPlayerLeft = (callback: (data: PlayerLeftData) => void) => {
-  onEvent<PlayerLeftData>(SrvEvts.PLAYER_LEFT, callback);
+  onEvent<PlayerLeftData>(ServerEmitEvents.PLAYER_LEFT, callback);
 };
 
 export const onInvalidMove = (callback: (data: InvalidMoveData) => void) => {
-  onEvent<InvalidMoveData>(SrvEvts.INVALID_MOVE, callback);
+  onEvent<InvalidMoveData>(ServerEmitEvents.INVALID_MOVE, callback);
 };
 
 export const onJoinError = (callback: (data: JoinErrorData) => void) => {
-  onEvent<JoinErrorData>(SrvEvts.JOIN_ERROR, callback);
+  onEvent<JoinErrorData>(ServerEmitEvents.JOIN_ERROR, callback);
 };
 
 export const onEvent = <T = unknown>(

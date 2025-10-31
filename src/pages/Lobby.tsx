@@ -5,7 +5,7 @@ import ModalGames from "../components/ModalGames";
 import { useGameStore } from "../store/gameStore";
 import { createRoom, joinRoom, offEvent, onGameStart, onJoinError, onRoomCreated, onRoomJoined, onRoomList, onRoomListUpdate,} from "../services/socketService";
 
-import { SrvEvts, type GameStartData, type JoinErrorData, type RoomInfo, type RoomJoinedData } from "../models/socketEvents";
+import { ServerEmitEvents, type GameStartData, type JoinErrorData, type RoomInfo, type RoomJoinedData } from "../models/socketEvents";
 
 const avatars = [
   { src: "ghost-avatar.png", alt: "Ghost", name: "Ghost" },
@@ -69,12 +69,12 @@ const Lobby = () => {
   onRoomCreated(handleOnCreated)
 
   return () => {
-    offEvent(SrvEvts.ROOM_LIST, handleRoomList);
-    offEvent(SrvEvts.ROOM_JOINED, handleRoomJoined);
-    offEvent(SrvEvts.ROOM_LIST_UPDATE, handleRoomListUpdate);
-    offEvent(SrvEvts.GAME_START, handleGameStart);
-    offEvent(SrvEvts.JOIN_ERROR, handleJoinError);
-    offEvent(SrvEvts.ROOM_CREATED, handleOnCreated)
+    offEvent(ServerEmitEvents.ROOM_LIST, handleRoomList);
+    offEvent(ServerEmitEvents.ROOM_JOINED, handleRoomJoined);
+    offEvent(ServerEmitEvents.ROOM_LIST_UPDATE, handleRoomListUpdate);
+    offEvent(ServerEmitEvents.GAME_START, handleGameStart);
+    offEvent(ServerEmitEvents.JOIN_ERROR, handleJoinError);
+    offEvent(ServerEmitEvents.ROOM_CREATED, handleOnCreated)
 
   };
 }, []);
