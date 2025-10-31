@@ -156,7 +156,7 @@ const Lobby = () => {
             <button className="btn btn-primary" onClick={handleNewGame}>
               Create Game
             </button>
-            <button className="btn btn-brown">Available Game</button>
+            <button className="btn btn-brown">Join Random Game</button>
             <button
               className="btn btn-outline"
               onClick={() => setShowGamesModal(true)}
