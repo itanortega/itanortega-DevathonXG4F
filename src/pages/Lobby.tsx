@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AvatarCard from "../components/AvatarCard";
 import ModalGames from "../components/ModalGames";
@@ -40,6 +40,8 @@ const Lobby = () => {
     null,
   );
   const [showGamesModal, setShowGamesModal] = useState<boolean>(false);
+  const [avaiableGameList, setvaiableGameList] = useState<RoomInfo[] | null>(null)
+  const lastRoomCreated = useRef<string | null>(null)
   const selectAvatar = (src: string, name: string) => {
     setSelectedAvatarName(name);
     setAvatarUrl(src);
@@ -92,12 +94,9 @@ const Lobby = () => {
       return;
     }
     console.log(username, avatarUrl);
-    navigate("/board");
-  };
+      createRoom()
 
-  const handleJoinGame = (gameId: number) => {
-    console.log(`Joining game with ID: ${gameId}`);
-    //navigate("/board");
+
   };
 
   const handleCloseGamesModal = () => {
@@ -107,8 +106,8 @@ const Lobby = () => {
   return (
     <>
       <ModalGames
-        games={data}
-        onJoinGame={handleJoinGame}
+        games={avaiableGameList}
+        onJoinGame={(roomId: string) => joinRoom(roomId)}
         show={showGamesModal}
         onClose={handleCloseGamesModal}
       />
@@ -127,7 +126,6 @@ const Lobby = () => {
             className="w-full placeholder:text-orange-300 max-w-md p-2 rounded-lg bg-orange-950/90 text-orange-500 font-bold text-center shadow-sm"
             value={username || ""}
             onChange={(e) => setUsername(e.target.value)}
-            onClick={(e) => console.log(e.target)}
           />
         </div>
 

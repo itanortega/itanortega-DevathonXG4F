@@ -12,7 +12,7 @@ const Player = ({ name, score, avatarUrl }: PlayerProps) => {
         style={{ backgroundImage: `url(${avatarUrl})` }}
       ></div>
       <p className="text-white text-2xl">{name}</p>
-      <p className="text-white text-4xl">{score}</p>
+      <p className="text-white text-4xl">score: {score}</p>
     </div>
   );
 };
